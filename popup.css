@@ -1,0 +1,100 @@
+body {
+  padding: 0 10px 10px;
+  width: 300px;
+}
+
+.bold {
+  font-weight: 600;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  font-size: 0.8em;
+}
+
+.heading > img {
+  width: 40px;
+  height: 40px;
+}
+
+#description {
+  font-size: 1.1em;
+  color: #5e5e5e;
+}
+
+#board {
+  margin-bottom: 18px;
+}
+
+#board.warning {
+  border: solid;
+  border-radius: 10px;
+  border-width: 2px;
+  border-color: #de0426;
+  background: #de042620;
+  font-weight: 600;
+}
+
+#board > p,
+#board > * > p {
+  padding: 0 10px;
+  font-size: 1.1em;
+}
+
+#board > * > ol > li {
+  margin-top: 8px;
+  padding: 4px 0;
+  font-size: 1.1em;
+}
+
+#board span,
+#board label {
+  font-size: 1.1em;
+}
+
+button {
+  width: 100%;
+  color: #101010;
+  background-color: white;
+  border-width: 2px;
+  border-radius: 10px;
+  padding: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #101010;
+  color: white;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  background-color: #f1f1f1;
+  color: #b5b5b5;
+  border: none;
+}
+
+#warning-message {
+  margin-top: 1em;
+  font-size: 1.5em;
+  color: #de0426;
+  font-weight: 600;
+}
+
+#progress {
+  margin-top: 1em;
+  width: 100%;
+  background-color: #e0e0e0;
+}
+
+#progress-bar {
+  width: 0%;
+  height: 20px;
+  background-color: #4caf50;
+  text-align: center;
+  line-height: 20px;
+  color: white;
+}

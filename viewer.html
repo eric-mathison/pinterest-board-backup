@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pinterest Board Backup</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f0f0f0;
+      }
+      .masonry {
+        column-count: 3;
+        column-gap: 20px;
+      }
+      .card {
+        break-inside: avoid;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        overflow: hidden;
+      }
+      .card-content {
+        padding: 15px;
+      }
+      .card img,
+      .card video {
+        width: 100%;
+        display: block;
+      }
+      .card h2 {
+        margin-top: 0;
+        font-size: 1.2em;
+      }
+      .card p {
+        font-size: 0.9em;
+        color: #666;
+        line-height: 1.2em;
+      }
+      @media (max-width: 900px) {
+        .masonry {
+          column-count: 2;
+        }
+      }
+      @media (max-width: 600px) {
+        .masonry {
+          column-count: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="masonry" class="masonry"></div>
+    <script src="viewer.js"></script>
+    <script src="data.js"></script>
+  </body>
+</html>
