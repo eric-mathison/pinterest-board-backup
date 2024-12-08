@@ -1,4 +1,5 @@
-#Pinterest Board Backup
+# Pinterest Board Backup
 
-##Privacy Policy
-This chrome extension interfaces with your browser and does not record or share any data.
+## Privacy Policy
+
+This chrome extension interfaces with your browser and does not record nor share any data.
