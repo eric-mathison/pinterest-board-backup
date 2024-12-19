@@ -1,10 +1,10 @@
-const OFFSCREEN_DOCUMENT_PATH = "/offscreen.html";
-let title;
-let json;
-let jsonArray = [];
-let options = [];
+const OFFSCREEN_DOCUMENT_PATH = "/offscreen.html"
+let title
+let json
+let jsonArray = []
+let options = []
 
-chrome.runtime.onMessage.addListener(handleMessages);
+chrome.runtime.onMessage.addListener(handleMessages)
 
 /**
  * Handles incoming messages sent over the messaging api
@@ -13,52 +13,52 @@ chrome.runtime.onMessage.addListener(handleMessages);
  */
 async function handleMessages(message) {
   if (message.target !== "background") {
-    return;
+    return
   }
 
   switch (message.type) {
     case "options":
-      options = message.data;
-      break;
+      options = message.data
+      break
     case "get-page-data":
-      ({ title, uniquePinArray } = message.data);
+      ;({ title, uniquePinArray } = message.data)
       for (const pin of uniquePinArray) {
         chrome.runtime.sendMessage({
           type: "progressUpdate",
           target: "popup",
           data: { currentIndex: 0, totalIndex: 1 },
-        });
+        })
         if (shouldGetPageData(options, pin)) {
-          await getPageInfo("parse-page", pin.id);
+          await getPageInfo("parse-page", pin.id)
           chrome.runtime.sendMessage({
             type: "progressUpdate",
             target: "popup",
             data: { currentIndex: 1, totalIndex: 1 },
-          });
+          })
         }
       }
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      closeOffscreenDocument();
+      await new Promise((resolve) => setTimeout(resolve, 3000))
+      closeOffscreenDocument()
 
       chrome.tabs.query({ active: true }, (tabs) => {
-        const tab = tabs[0];
+        const tab = tabs[0]
         if (tab) {
           chrome.tabs.sendMessage(tab.id, {
             type: "processJsonArray",
             target: "content",
             data: { title, jsonArray },
-          });
+          })
         }
-      });
+      })
 
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-      jsonArray = [];
-      break;
+      await new Promise((resolve) => setTimeout(resolve, 3000))
+      jsonArray = []
+      break
     case "page-data-result":
-      handlePageDataResult(message.data);
-      break;
+      handlePageDataResult(message.data)
+      break
     default:
-      console.warn(`Unexpected message type received: '${message.type}'.`);
+      console.warn(`Unexpected message type received: '${message.type}'.`)
   }
 }
 
@@ -75,17 +75,17 @@ async function getPageInfo(type, pinId) {
       url: OFFSCREEN_DOCUMENT_PATH,
       reasons: [chrome.offscreen.Reason.DOM_PARSER],
       justification: "Parse DOM",
-    });
+    })
   }
 
-  const url = `https://www.pinterest.com/pin/${pinId}/`;
-  const htmlString = await fetchWithRandomDelay(url).then((data) => data);
+  const url = `https://www.pinterest.com/pin/${pinId}/`
+  const htmlString = await fetchWithRandomDelay(url).then((data) => data)
 
   chrome.runtime.sendMessage({
     type,
     target: "offscreen",
     data: { pinId, htmlString },
-  });
+  })
 }
 
 /**
@@ -94,7 +94,7 @@ async function getPageInfo(type, pinId) {
  * @param {*} data
  */
 function handlePageDataResult(data) {
-  const pinId = data.id;
+  const pinId = data.id
   const pinData = {
     id: pinId,
     title: data.props.closeup_unified_title || undefined,
@@ -107,8 +107,8 @@ function handlePageDataResult(data) {
       data.props.story_pin_data?.pages[0]?.blocks[0]?.video?.video_list?.V_EXP4
         ?.url,
     note: data.props.pin_note?.text,
-  };
-  jsonArray.push(pinData);
+  }
+  jsonArray.push(pinData)
 }
 
 /**
@@ -123,9 +123,9 @@ function shouldGetPageData(options, pin) {
     (!options.includes("videos") && pin.isVideo) ||
     (!options.includes("images") && !pin.isVideo)
   ) {
-    return false;
+    return false
   }
-  return true;
+  return true
 }
 
 /**
@@ -135,9 +135,9 @@ function shouldGetPageData(options, pin) {
  */
 async function closeOffscreenDocument() {
   if (!(await hasDocument())) {
-    return;
+    return
   }
-  await chrome.offscreen.closeDocument();
+  await chrome.offscreen.closeDocument()
 }
 
 /**
@@ -146,13 +146,13 @@ async function closeOffscreenDocument() {
  * @returns boolean
  */
 async function hasDocument() {
-  const matchedClients = await clients.matchAll();
+  const matchedClients = await clients.matchAll()
   for (const client of matchedClients) {
     if (client.url.endsWith(OFFSCREEN_DOCUMENT_PATH)) {
-      return true;
+      return true
     }
   }
-  return false;
+  return false
 }
 
 /**
@@ -163,7 +163,7 @@ async function hasDocument() {
  * @returns Random time in milliseconds
  */
 function getRandomFetchTime(minTime, maxTime) {
-  return Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
+  return Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime
 }
 
 /**
@@ -173,13 +173,13 @@ function getRandomFetchTime(minTime, maxTime) {
  * @returns
  */
 async function fetchWithRandomDelay(url) {
-  const delay = getRandomFetchTime(200, 1000);
-  await new Promise((resolve) => setTimeout(resolve, delay));
+  const delay = getRandomFetchTime(200, 1000)
+  await new Promise((resolve) => setTimeout(resolve, delay))
 
   try {
-    const response = await fetch(url).then((data) => data.text());
-    return response;
+    const response = await fetch(url).then((data) => data.text())
+    return response
   } catch (error) {
-    console.error("Error fetching data", error);
+    console.error("Error fetching data", error)
   }
 }
